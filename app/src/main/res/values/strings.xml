@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">MortgageCalculator</string>
+    <string name="mortgage_cal">Mortgage Calculator</string>
+    <string name="property_info">Property Info</string>
+    <string name="loan_info">Loan Info</string>
+    <string name="street_address">Street Address</string>
+    <string name="zipcode">Zipcode</string>
+    <string name="city">City</string>
+    <string name="state">State</string>
+    <string name="loan_amount">Loan Amount</string>
+    <string name="down_payment">Down Payment</string>
+    <string name="apr">Annual Percentage Rate(APR)</string>
+    <string name="property_type">Property Type</string>
+    <string name="terms">Terms</string>
+    <string name="save">Save</string>
+    <string name="calculate">Calculate</string>
+    <string name="new_calc">New</string>
+    <string name="monthly_payment">Monthly Payment : $</string>
+</resources>
