@@ -19,6 +19,7 @@ public class MortgageCalculatorActivity extends AppCompatActivity {
         Spinner spinnerUsStates = (Spinner) findViewById(R.id.spinner_us_states);
         Spinner spinnerPropertyType = (Spinner) findViewById(R.id.spinner_property_type);
         Spinner spinnerTerm = (Spinner) findViewById(R.id.spinner_term);
+
         // Create an ArrayAdapter using the string array and a default spinner activity_mortgage_calculator
         ArrayAdapter<CharSequence> adapterUsStates = ArrayAdapter.createFromResource(this,
                 R.array.us_states, android.R.layout.simple_spinner_item);
@@ -26,10 +27,12 @@ public class MortgageCalculatorActivity extends AppCompatActivity {
                 R.array.property_type, android.R.layout.simple_spinner_item);
         ArrayAdapter<CharSequence> adapterTerm = ArrayAdapter.createFromResource(this,
                 R.array.term, android.R.layout.simple_spinner_item);
+
         // Specify the activity_mortgage_calculator to use when the list of choices appears
         adapterUsStates.setDropDownViewResource(android.R.layout.simple_spinner_item);
         adapterPropertyType.setDropDownViewResource(android.R.layout.simple_spinner_item);
         adapterTerm.setDropDownViewResource(android.R.layout.simple_spinner_item);
+
         // Apply the adapter to the spinner
         spinnerUsStates.setAdapter(adapterUsStates);
         spinnerPropertyType.setAdapter(adapterPropertyType);
