@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">MortgageCalculator</string>
-    <string name="mortgage_cal">Mortgage Calculator</string>
+    <string name="app_name">Mortgage Calculator</string>
+    <string name="app_info">SJSU Spring 2017 CMPE 277 Lab 2</string>
 
     <string name="property_info">Property Info</string>
     <string name="loan_info">Loan Info</string>
@@ -20,13 +20,14 @@
     <string name="new_cal">New</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="map_action">View Saved Properties on Map</string>
 
     <string name="monthly_payment">Monthly Payment: $ %1$s</string>
 
     <string name="saving">Saving &#8230;</string>
     <string name="invalid_address">Please provide a valid property address</string>
-    <string name="missing_loan_info">Please enter missing loan info</string>
-    <string name="missing_property_info">Please enter missing property info</string>
+    <string name="missing_loan_info">Please enter loan info</string>
+    <string name="missing_property_info">Please enter property info</string>
 
     <string name="info_label_property_type">Property Type: %1$s</string>
     <string name="info_label_street_address">Street Address: %1$s</string>
@@ -34,4 +35,6 @@
     <string name="info_label_loan_amount">Loan Amount: %1$s</string>
     <string name="info_label_apr">APR: %1$s</string>
 
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
 </resources>

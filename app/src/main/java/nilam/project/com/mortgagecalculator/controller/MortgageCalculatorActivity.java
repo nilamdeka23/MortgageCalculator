@@ -1,12 +1,18 @@
 package nilam.project.com.mortgagecalculator.controller;
 
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,6 +47,9 @@ public class MortgageCalculatorActivity extends AppCompatActivity {
     private CardView mCardViewMortgageCal;
     private TextView mTextViewPayment;
 
+    private ActionBarDrawerToggle mDrawerToggle;
+    private DrawerLayout mDrawerLayout;
+    private String mActivityTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +59,39 @@ public class MortgageCalculatorActivity extends AppCompatActivity {
         init();
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
     private void init() {
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mActivityTitle = getTitle().toString();
+        addDrawerItems();
+        setupDrawer();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         mEditTxtStrtAddress = (EditText) findViewById(R.id.edittext_street_address);
         mEditTxtCity = (EditText) findViewById(R.id.edittext_city);
         mEditTxtZipcode = (EditText) findViewById(R.id.edittext_zipcode);
@@ -66,51 +107,7 @@ public class MortgageCalculatorActivity extends AppCompatActivity {
         spinnerPropertyType = (Spinner) findViewById(R.id.spinner_property_type);
         spinnerTerm = (Spinner) findViewById(R.id.spinner_term);
 
-        // set adapter to the spinner
-        spinnerUsStates.setAdapter(ArrayAdapter.createFromResource(this,
-                R.array.us_states, android.R.layout.simple_spinner_item));
-        spinnerPropertyType.setAdapter(ArrayAdapter.createFromResource(this,
-                R.array.property_type, android.R.layout.simple_spinner_item));
-        spinnerTerm.setAdapter(ArrayAdapter.createFromResource(this,
-                R.array.term, android.R.layout.simple_spinner_item));
-
-        spinnerUsStates.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                state = parent.getItemAtPosition(position).toString();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                state = NOT_SELECTED;
-            }
-        });
-
-        spinnerPropertyType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                propertyType = parent.getItemAtPosition(position).toString();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                propertyType = NOT_SELECTED;
-            }
-        });
-
-
-        spinnerTerm.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                term = parent.getItemAtPosition(position).toString();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                term = NOT_SELECTED;
-            }
-        });
-
+        setupSpinners();
     }
 
     /*
@@ -221,6 +218,87 @@ public class MortgageCalculatorActivity extends AppCompatActivity {
             mCardViewMortgageCal.setVisibility(View.VISIBLE);
         else
             mCardViewMortgageCal.setVisibility(View.GONE);
+    }
+
+    private void setupDrawer() {
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+                R.string.drawer_open, R.string.drawer_close) {
+
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                getSupportActionBar().setTitle("");
+                invalidateOptionsMenu();
+            }
+
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                getSupportActionBar().setTitle(mActivityTitle);
+                invalidateOptionsMenu();
+            }
+        };
+
+        mDrawerToggle.setDrawerIndicatorEnabled(true);
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
+    }
+
+    private void addDrawerItems() {
+
+        RelativeLayout mapActionLayout = (RelativeLayout) findViewById(R.id.layout_map_action);
+        mapActionLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MortgageCalculatorActivity.this, GoogleMapsActivity.class));
+            }
+        });
+
+    }
+
+    private void setupSpinners() {
+        // set adapter to the spinner
+        spinnerUsStates.setAdapter(ArrayAdapter.createFromResource(this,
+                R.array.us_states, android.R.layout.simple_spinner_item));
+        spinnerPropertyType.setAdapter(ArrayAdapter.createFromResource(this,
+                R.array.property_type, android.R.layout.simple_spinner_item));
+        spinnerTerm.setAdapter(ArrayAdapter.createFromResource(this,
+                R.array.term, android.R.layout.simple_spinner_item));
+
+        spinnerUsStates.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                state = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                state = NOT_SELECTED;
+            }
+        });
+
+        spinnerPropertyType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                propertyType = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                propertyType = NOT_SELECTED;
+            }
+        });
+
+
+        spinnerTerm.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                term = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                term = NOT_SELECTED;
+            }
+        });
+
     }
 
 }

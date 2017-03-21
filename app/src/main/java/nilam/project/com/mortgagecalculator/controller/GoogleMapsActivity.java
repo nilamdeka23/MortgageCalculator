@@ -1,7 +1,10 @@
 package nilam.project.com.mortgagecalculator.controller;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -21,26 +24,51 @@ import nilam.project.com.mortgagecalculator.R;
 import nilam.project.com.mortgagecalculator.model.RecordDao;
 import nilam.project.com.mortgagecalculator.utils.DatabaseHelper;
 
-/**
- * Created by nilamdeka on 3/19/17.
- */
 
 public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
+    private static final String TOWNHOUSE = "Townhouse";
+    private static final String CONDO = "Condo";
+
     private GoogleMap mMap;
     private List<RecordDao> records;
+    private DatabaseHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_google_maps);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        db = new DatabaseHelper(this);
+        // fetch all records
         fetchRecords();
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
+
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+//        fetchRecords();
+//        refreshMap();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -102,19 +130,23 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
         for (RecordDao record : records) {
             if (record.getId() != Integer.parseInt(marker.getTitle()))
                 continue;
+
             records.remove(record);
+            // remove record from database
+            db.deleteRecord(record);
             break;
         }
 
-        mMap.clear();
+        refreshMap();
+    }
 
+    // redraw map markers
+    private void refreshMap() {
+        mMap.clear();
         drawMarkers();
     }
 
-    // fetch all user records
     private void fetchRecords() {
-
-        DatabaseHelper db = new DatabaseHelper(this);
         records = db.getAllRecords();
     }
 
@@ -131,8 +163,8 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
 
             // move map to the last added mortgage information
             if (i == records.size() - 1)
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(record.getLatitude(),
-                        record.getLongitude())));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(record.getLatitude(),
+                        record.getLongitude()), 12.0f));
 
         }
     }
@@ -142,9 +174,9 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
         // set house as default icon
         BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.mipmap.house);
 
-        if (propertyType.equals("Townhouse")) {
+        if (propertyType.equals(TOWNHOUSE)) {
             icon = BitmapDescriptorFactory.fromResource(R.mipmap.townhouse);
-        } else if (propertyType.equals("Condo")) {
+        } else if (propertyType.equals(CONDO)) {
             icon = BitmapDescriptorFactory.fromResource(R.mipmap.condo);
         }
 
