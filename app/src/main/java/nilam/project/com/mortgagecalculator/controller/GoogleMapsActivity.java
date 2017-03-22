@@ -174,7 +174,7 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
         records.remove(record);
 
         // remove record from database
-//        dbHelper.deleteRecord(record);
+        dbHelper.deleteRecord(record);
 
         refreshMap();
     }
