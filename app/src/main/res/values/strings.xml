@@ -11,7 +11,7 @@
 
     <string name="loan_amount">Loan Amount</string>
     <string name="down_payment">Down Payment</string>
-    <string name="apr">Annual Percentage Rate(APR)</string>
+    <string name="apr">Annual Percentage(APR)</string>
     <string name="property_type">Property Type</string>
     <string name="terms">Terms</string>
 

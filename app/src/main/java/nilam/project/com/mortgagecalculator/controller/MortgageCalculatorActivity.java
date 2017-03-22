@@ -7,6 +7,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,11 +20,16 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.Arrays;
+import java.util.List;
+
 import nilam.project.com.mortgagecalculator.R;
 import nilam.project.com.mortgagecalculator.model.Loan;
 import nilam.project.com.mortgagecalculator.model.Property;
 import nilam.project.com.mortgagecalculator.model.RecordDao;
 import nilam.project.com.mortgagecalculator.utils.DatabaseHelper;
+
+import static nilam.project.com.mortgagecalculator.controller.GoogleMapsActivity.ID;
 
 public class MortgageCalculatorActivity extends AppCompatActivity {
 
@@ -51,6 +57,8 @@ public class MortgageCalculatorActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private String mActivityTitle;
 
+    private int id = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +70,46 @@ public class MortgageCalculatorActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+
+        id = intent.getIntExtra(ID, -1);
+
+        if (id >= 0) {
+            DatabaseHelper dbHelper = new DatabaseHelper(this);
+
+            RecordDao record = dbHelper.getRecord(id);
+
+            mEditTxtStrtAddress.setText(record.getStreetAddress());
+            mEditTxtCity.setText(record.getCity());
+            mEditTxtZipcode.setText(record.getZipcode());
+
+            mEditTxtLoanAmount.setText(record.getAmount());
+            mEditTxtDownPayment.setText(record.getDownPayment());
+            mEditTxtApr.setText(record.getApr());
+
+            state = record.getState();
+            term = record.getTerm();
+            propertyType = record.getType();
+
+            List<String> states = Arrays.asList(getResources().getStringArray(R.array.us_states));
+            List<String> terms = Arrays.asList(getResources().getStringArray(R.array.term));
+            List<String> propertyTypes = Arrays.asList(getResources().getStringArray(R.array.property_type));
+
+            if (terms.indexOf(term) >= 0)
+                spinnerTerm.setSelection(terms.indexOf(term));
+
+            if (states.indexOf(state) >= 0)
+                spinnerUsStates.setSelection(states.indexOf(state));
+
+            if (propertyTypes.indexOf(propertyType) >= 0)
+                spinnerPropertyType.setSelection(propertyTypes.indexOf(propertyType));
+
+            spinnerTerm.clearFocus();
+            spinnerUsStates.clearFocus();
+            spinnerPropertyType.clearFocus();
+        }
+        // close the drawer
+        mDrawerLayout.closeDrawer(Gravity.START, true);
+
     }
 
     @Override
@@ -165,9 +213,9 @@ public class MortgageCalculatorActivity extends AppCompatActivity {
                     monthlyPayment = mTextViewPayment.getText().toString();
                 }
 
-                DatabaseHelper db = new DatabaseHelper(this);
+                DatabaseHelper dbHelper = new DatabaseHelper(this);
                 // insert record
-                db.addRecord(new RecordDao(mEditTxtStrtAddress.getText().toString(),
+                dbHelper.addRecord(new RecordDao(mEditTxtStrtAddress.getText().toString(),
                         mEditTxtCity.getText().toString(), state, mEditTxtZipcode.getText().toString(),
                         propertyType, mEditTxtLoanAmount.getText().toString(),
                         mEditTxtDownPayment.getText().toString(), mEditTxtApr.getText().toString(),
@@ -247,7 +295,9 @@ public class MortgageCalculatorActivity extends AppCompatActivity {
         mapActionLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MortgageCalculatorActivity.this, GoogleMapsActivity.class));
+                Intent intent = new Intent(new Intent(MortgageCalculatorActivity.this, GoogleMapsActivity.class));
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
         });
 
