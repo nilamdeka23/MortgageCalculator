@@ -12,8 +12,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,12 +37,12 @@ public class MortgageCalculatorActivity extends AppCompatActivity {
 
     private static final String NOT_SELECTED = "ns";
 
-    private EditText mEditTxtStrtAddress;
-    private EditText mEditTxtCity;
-    private EditText mEditTxtZipcode;
-    private EditText mEditTxtLoanAmount;
-    private EditText mEditTxtDownPayment;
-    private EditText mEditTxtApr;
+    private EditText editTxtStrtAddress;
+    private EditText editTxtCity;
+    private EditText editTxtZipcode;
+    private EditText editTxtLoanAmount;
+    private EditText editTxtDownPayment;
+    private EditText editTxtApr;
 
     private Spinner spinnerUsStates;
     private Spinner spinnerPropertyType;
@@ -50,12 +52,14 @@ public class MortgageCalculatorActivity extends AppCompatActivity {
     private String propertyType = NOT_SELECTED;
     private String term = NOT_SELECTED;
 
-    private CardView mCardViewMortgageCal;
-    private TextView mTextViewPayment;
+    private CardView cardViewMortgageCal;
+    private TextView textViewPayment;
 
-    private ActionBarDrawerToggle mDrawerToggle;
-    private DrawerLayout mDrawerLayout;
-    private String mActivityTitle;
+    private ActionBarDrawerToggle drawerToggle;
+    private DrawerLayout drawerLayout;
+    private String activityTitle;
+
+    private Button btnSave;
 
     private int id = -1;
 
@@ -72,19 +76,20 @@ public class MortgageCalculatorActivity extends AppCompatActivity {
         super.onNewIntent(intent);
 
         id = intent.getIntExtra(ID, -1);
+        btnSave.setText(getString(R.string.save));
 
         if (id >= 0) {
             DatabaseHelper dbHelper = new DatabaseHelper(this);
 
             RecordDao record = dbHelper.getRecord(id);
 
-            mEditTxtStrtAddress.setText(record.getStreetAddress());
-            mEditTxtCity.setText(record.getCity());
-            mEditTxtZipcode.setText(record.getZipcode());
+            editTxtStrtAddress.setText(record.getStreetAddress());
+            editTxtCity.setText(record.getCity());
+            editTxtZipcode.setText(record.getZipcode());
 
-            mEditTxtLoanAmount.setText(record.getAmount());
-            mEditTxtDownPayment.setText(record.getDownPayment());
-            mEditTxtApr.setText(record.getApr());
+            editTxtLoanAmount.setText(record.getAmount());
+            editTxtDownPayment.setText(record.getDownPayment());
+            editTxtApr.setText(record.getApr());
 
             state = record.getState();
             term = record.getTerm();
@@ -106,50 +111,54 @@ public class MortgageCalculatorActivity extends AppCompatActivity {
             spinnerTerm.clearFocus();
             spinnerUsStates.clearFocus();
             spinnerPropertyType.clearFocus();
+
+            // set save button text as update
+            btnSave.setText(getString(R.string.update));
         }
         // close the drawer
-        mDrawerLayout.closeDrawer(Gravity.START, true);
+        drawerLayout.closeDrawer(Gravity.START, true);
 
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+        return drawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
-
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        mDrawerToggle.syncState();
+        drawerToggle.syncState();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
     }
 
     private void init() {
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mActivityTitle = getTitle().toString();
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        activityTitle = getTitle().toString();
         addDrawerItems();
         setupDrawer();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mEditTxtStrtAddress = (EditText) findViewById(R.id.edittext_street_address);
-        mEditTxtCity = (EditText) findViewById(R.id.edittext_city);
-        mEditTxtZipcode = (EditText) findViewById(R.id.edittext_zipcode);
+        editTxtStrtAddress = (EditText) findViewById(R.id.edittext_street_address);
+        editTxtCity = (EditText) findViewById(R.id.edittext_city);
+        editTxtZipcode = (EditText) findViewById(R.id.edittext_zipcode);
 
-        mEditTxtLoanAmount = (EditText) findViewById(R.id.edittext_loan_amount);
-        mEditTxtDownPayment = (EditText) findViewById(R.id.edittext_down_payment);
-        mEditTxtApr = (EditText) findViewById(R.id.edittext_apr);
+        editTxtLoanAmount = (EditText) findViewById(R.id.edittext_loan_amount);
+        editTxtDownPayment = (EditText) findViewById(R.id.edittext_down_payment);
+        editTxtApr = (EditText) findViewById(R.id.edittext_apr);
 
-        mCardViewMortgageCal = (CardView) findViewById(R.id.cardview_mortgage_cal);
-        mTextViewPayment = (TextView) findViewById(R.id.textview_payment);
+        cardViewMortgageCal = (CardView) findViewById(R.id.cardview_mortgage_cal);
+        textViewPayment = (TextView) findViewById(R.id.textview_payment);
+
+        btnSave = (Button) findViewById(R.id.btnSave);
 
         spinnerUsStates = (Spinner) findViewById(R.id.spinner_us_states);
         spinnerPropertyType = (Spinner) findViewById(R.id.spinner_property_type);
@@ -162,37 +171,21 @@ public class MortgageCalculatorActivity extends AppCompatActivity {
      * Button onClick listeners
      */
     public void newCalBtnClkListener(View view) {
-        showMortgageCalculator(false);
-
-        mEditTxtStrtAddress.getText().clear();
-        mEditTxtCity.getText().clear();
-        mEditTxtZipcode.getText().clear();
-
-        mEditTxtLoanAmount.getText().clear();
-        mEditTxtDownPayment.getText().clear();
-        mEditTxtApr.getText().clear();
-
-        spinnerTerm.setSelection(0);
-        spinnerTerm.clearFocus();
-        spinnerUsStates.setSelection(0);
-        spinnerUsStates.clearFocus();
-        spinnerPropertyType.setSelection(0);
-        spinnerPropertyType.clearFocus();
-
-        state = NOT_SELECTED;
-        term = NOT_SELECTED;
-        propertyType = NOT_SELECTED;
+        clearForm();
     }
 
     public void calculateBtnClkListener(View view) {
 
         if (isLoanInfoValid()) {
-            Loan loan = new Loan(mEditTxtLoanAmount.getText().toString(),
-                    mEditTxtDownPayment.getText().toString(), mEditTxtApr.getText().toString(), term);
+            Loan loan = new Loan(editTxtLoanAmount.getText().toString(),
+                    editTxtDownPayment.getText().toString(), editTxtApr.getText().toString(), term);
 
-            mTextViewPayment.setText(String.format(getString(R.string.monthly_payment), loan.calculateMonthlyPayment()));
+            textViewPayment.setText(String.format(getString(R.string.monthly_payment), loan.calculateMonthlyPayment()));
             // render the view visible
             showMortgageCalculator(true);
+            // scroll to top
+            ScrollView scrollView = (ScrollView) findViewById(R.id.scrollview_master);
+            scrollView.scrollTo(0, 0);
         } else {
 
             Toast.makeText(this, R.string.missing_loan_info, Toast.LENGTH_SHORT).show();
@@ -203,25 +196,36 @@ public class MortgageCalculatorActivity extends AppCompatActivity {
     public void saveBtnClkListener(View view) {
 
         if (isPropertyInfoValid()) {
-            Property property = new Property(mEditTxtStrtAddress.getText().toString(),
-                    mEditTxtCity.getText().toString(), state, mEditTxtZipcode.getText().toString());
+            Property property = new Property(editTxtStrtAddress.getText().toString(),
+                    editTxtCity.getText().toString(), state, editTxtZipcode.getText().toString());
             LatLng latLng = property.getLatLngFromPropertyAddress(this);
 
             if (latLng != null) {
                 String monthlyPayment = "";
-                if (!mTextViewPayment.equals(R.string.monthly_payment)) {
-                    monthlyPayment = mTextViewPayment.getText().toString();
+                if (!textViewPayment.equals(R.string.monthly_payment)) {
+                    monthlyPayment = textViewPayment.getText().toString();
                 }
 
                 DatabaseHelper dbHelper = new DatabaseHelper(this);
-                // insert record
-                dbHelper.addRecord(new RecordDao(mEditTxtStrtAddress.getText().toString(),
-                        mEditTxtCity.getText().toString(), state, mEditTxtZipcode.getText().toString(),
-                        propertyType, mEditTxtLoanAmount.getText().toString(),
-                        mEditTxtDownPayment.getText().toString(), mEditTxtApr.getText().toString(),
-                        term, latLng.latitude, latLng.longitude, monthlyPayment));
+                RecordDao record = new RecordDao(editTxtStrtAddress.getText().toString(),
+                        editTxtCity.getText().toString(), state, editTxtZipcode.getText().toString(),
+                        propertyType, editTxtLoanAmount.getText().toString(),
+                        editTxtDownPayment.getText().toString(), editTxtApr.getText().toString(),
+                        term, latLng.latitude, latLng.longitude, monthlyPayment);
 
-                Toast.makeText(this, R.string.saving, Toast.LENGTH_SHORT).show();
+                if (id >= 0) {
+                    record.setId(id);
+                    // update record
+                    dbHelper.updateRecord(record);
+
+                    Toast.makeText(this, R.string.updating, Toast.LENGTH_SHORT).show();
+
+                } else {
+
+                    Toast.makeText(this, R.string.saving, Toast.LENGTH_SHORT).show();
+                    // insert record
+                    dbHelper.addRecord(record);
+                }
 
             } else {
                 Toast.makeText(this, R.string.invalid_address, Toast.LENGTH_SHORT).show();
@@ -239,9 +243,9 @@ public class MortgageCalculatorActivity extends AppCompatActivity {
     private boolean isPropertyInfoValid() {
         boolean flag = true;
 
-        if (mEditTxtStrtAddress.getText().toString().length() <= 0 ||
-                mEditTxtCity.getText().toString().length() <= 0 ||
-                mEditTxtZipcode.getText().toString().length() <= 0 ||
+        if (editTxtStrtAddress.getText().toString().length() <= 0 ||
+                editTxtCity.getText().toString().length() <= 0 ||
+                editTxtZipcode.getText().toString().length() <= 0 ||
                 state.equals(NOT_SELECTED) ||
                 propertyType.equals(NOT_SELECTED))
             flag = false;
@@ -252,9 +256,9 @@ public class MortgageCalculatorActivity extends AppCompatActivity {
     private boolean isLoanInfoValid() {
         boolean flag = true;
 
-        if (mEditTxtLoanAmount.getText().toString().length() <= 0 ||
-                mEditTxtApr.getText().toString().length() <= 0 ||
-                mEditTxtDownPayment.getText().toString().length() <= 0 ||
+        if (editTxtLoanAmount.getText().toString().length() <= 0 ||
+                editTxtApr.getText().toString().length() <= 0 ||
+                editTxtDownPayment.getText().toString().length() <= 0 ||
                 term.equals(NOT_SELECTED))
             flag = false;
 
@@ -263,13 +267,13 @@ public class MortgageCalculatorActivity extends AppCompatActivity {
 
     private void showMortgageCalculator(boolean flag) {
         if (flag)
-            mCardViewMortgageCal.setVisibility(View.VISIBLE);
+            cardViewMortgageCal.setVisibility(View.VISIBLE);
         else
-            mCardViewMortgageCal.setVisibility(View.GONE);
+            cardViewMortgageCal.setVisibility(View.GONE);
     }
 
     private void setupDrawer() {
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
                 R.string.drawer_open, R.string.drawer_close) {
 
             public void onDrawerOpened(View drawerView) {
@@ -280,13 +284,13 @@ public class MortgageCalculatorActivity extends AppCompatActivity {
 
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                getSupportActionBar().setTitle(mActivityTitle);
+                getSupportActionBar().setTitle(activityTitle);
                 invalidateOptionsMenu();
             }
         };
 
-        mDrawerToggle.setDrawerIndicatorEnabled(true);
-        mDrawerLayout.addDrawerListener(mDrawerToggle);
+        drawerToggle.setDrawerIndicatorEnabled(true);
+        drawerLayout.addDrawerListener(drawerToggle);
     }
 
     private void addDrawerItems() {
@@ -349,6 +353,29 @@ public class MortgageCalculatorActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void clearForm() {
+        showMortgageCalculator(false);
+
+        editTxtStrtAddress.getText().clear();
+        editTxtCity.getText().clear();
+        editTxtZipcode.getText().clear();
+
+        editTxtLoanAmount.getText().clear();
+        editTxtDownPayment.getText().clear();
+        editTxtApr.getText().clear();
+
+        spinnerTerm.setSelection(0);
+        spinnerTerm.clearFocus();
+        spinnerUsStates.setSelection(0);
+        spinnerUsStates.clearFocus();
+        spinnerPropertyType.setSelection(0);
+        spinnerPropertyType.clearFocus();
+
+        state = NOT_SELECTED;
+        term = NOT_SELECTED;
+        propertyType = NOT_SELECTED;
     }
 
 }

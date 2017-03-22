@@ -29,7 +29,7 @@ public class Property {
     public LatLng getLatLngFromPropertyAddress(Context context) {
         LatLng latLng = null;
 
-        // TODO: test case "731 Market St, San Francisco, CA 94103"
+        // test case: "731 Market St, San Francisco, CA 94103"
         StringBuilder sbAddress = new StringBuilder(streetAddress).append(", ");
         sbAddress.append(city).append(", ");
         sbAddress.append(state).append(", ");

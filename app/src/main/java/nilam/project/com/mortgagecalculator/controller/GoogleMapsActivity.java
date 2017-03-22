@@ -26,7 +26,7 @@ import java.util.List;
 import nilam.project.com.mortgagecalculator.R;
 import nilam.project.com.mortgagecalculator.model.RecordDao;
 import nilam.project.com.mortgagecalculator.utils.DatabaseHelper;
-import nilam.project.com.mortgagecalculator.utils.OnInfoWindowElemTouchListener;
+import nilam.project.com.mortgagecalculator.view.OnInfoWindowElemTouchListener;
 import nilam.project.com.mortgagecalculator.view.MapWrapperLayout;
 
 

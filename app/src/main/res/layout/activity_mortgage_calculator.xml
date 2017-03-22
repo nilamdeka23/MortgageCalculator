@@ -7,7 +7,7 @@
     tools:context="nilam.project.com.mortgagecalculator.controller.MortgageCalculatorActivity">
 
     <ScrollView
-        android:id="@+id/activity_main"
+        android:id="@+id/scrollview_master"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
@@ -321,6 +321,7 @@
                 </LinearLayout>
 
                 <Button
+                    android:id="@+id/btnSave"
                     style="@style/ButtonTheme"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"

@@ -21,10 +21,12 @@
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="map_action">View Saved Properties on Map</string>
+    <string name="update">Update</string>
 
     <string name="monthly_payment">Monthly Payment: $ %1$s</string>
 
     <string name="saving">Saving &#8230;</string>
+    <string name="updating">Updating &#8230;</string>
     <string name="invalid_address">Please provide a valid property address</string>
     <string name="missing_loan_info">Please enter loan info</string>
     <string name="missing_property_info">Please enter property info</string>

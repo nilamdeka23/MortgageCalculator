@@ -1,4 +1,4 @@
-package nilam.project.com.mortgagecalculator.utils;
+package nilam.project.com.mortgagecalculator.view;
 
 import android.os.Handler;
 import android.view.MotionEvent;
