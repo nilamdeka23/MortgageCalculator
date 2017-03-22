@@ -36,6 +36,7 @@ import static nilam.project.com.mortgagecalculator.controller.GoogleMapsActivity
 public class MortgageCalculatorActivity extends AppCompatActivity {
 
     private static final String NOT_SELECTED = "ns";
+    private static final String EMPTY_STRING = "";
 
     private EditText editTxtStrtAddress;
     private EditText editTxtCity;
@@ -325,6 +326,17 @@ public class MortgageCalculatorActivity extends AppCompatActivity {
         spinnerUsStates.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                String stateValueSelected = parent.getItemAtPosition(position).toString();
+
+                if(EMPTY_STRING.equals( stateValueSelected )){
+
+                    state = NOT_SELECTED ;
+                }else{
+
+                    state = stateValueSelected;
+                }
+
                 state = parent.getItemAtPosition(position).toString();
             }
 
@@ -337,7 +349,16 @@ public class MortgageCalculatorActivity extends AppCompatActivity {
         spinnerPropertyType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                propertyType = parent.getItemAtPosition(position).toString();
+
+                String propTypeValueSelected = parent.getItemAtPosition(position).toString();
+
+                if(EMPTY_STRING.equals( propTypeValueSelected )){
+
+                    propertyType = NOT_SELECTED ;
+                }else{
+
+                    propertyType = propTypeValueSelected;
+                }
             }
 
             @Override
@@ -350,7 +371,16 @@ public class MortgageCalculatorActivity extends AppCompatActivity {
         spinnerTerm.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                term = parent.getItemAtPosition(position).toString();
+
+                String termValueSelected = parent.getItemAtPosition(position).toString();
+
+                if(EMPTY_STRING.equals( termValueSelected )){
+
+                    term = NOT_SELECTED ;
+                }else{
+
+                    term = termValueSelected;
+                }
             }
 
             @Override
