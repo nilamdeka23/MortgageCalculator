@@ -112,6 +112,11 @@ public class MortgageCalculatorActivity extends AppCompatActivity {
             spinnerUsStates.clearFocus();
             spinnerPropertyType.clearFocus();
 
+            if (!record.getMonthlyPayment().equals("Monthly Payment:")) {
+                textViewPayment.setText(record.getMonthlyPayment());
+                showMortgageCalculator(true);
+            }
+
             // set save button text as update
             btnSave.setText(getString(R.string.update));
         }
@@ -202,7 +207,7 @@ public class MortgageCalculatorActivity extends AppCompatActivity {
 
             if (latLng != null) {
                 String monthlyPayment = "";
-                if (!textViewPayment.equals(R.string.monthly_payment)) {
+                if (!textViewPayment.getText().equals("Monthly Payment:")) {
                     monthlyPayment = textViewPayment.getText().toString();
                 }
 
@@ -225,6 +230,7 @@ public class MortgageCalculatorActivity extends AppCompatActivity {
                     Toast.makeText(this, R.string.saving, Toast.LENGTH_SHORT).show();
                     // insert record
                     dbHelper.addRecord(record);
+                    clearForm();
                 }
 
             } else {
