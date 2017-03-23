@@ -1,6 +1,6 @@
 # Mortgage Calculator
  project to implement a mortgage calculator as a native Android app.
- ###### One can download a working signed apk of this app from [here](https://github.com/nilamdeka23/MortgageCalculator/blob/master/signed%20apk/mortgage_calculator.apk?raw=true)
+###### One can download a working signed apk of this app from [here](https://github.com/nilamdeka23/MortgageCalculator/blob/master/signed%20apk/mortgage_calculator.apk?raw=true)
  
 ### Design
 1. **Calculation View**: allows user to provide property and loan data, do the calculation, and optionally save it.
@@ -18,9 +18,12 @@
 
  **Note**:  Saved data is persisted in SQLite Database. Uninstalling the app will result in loss of user data.
  
+ ### Sample App FLow
+![Alt Text](https://github.com/nilamdeka23/MortgageCalculator/blob/master/gif/Mortgage%20Calculator.gif)
+##### I tried to follow the Material Design guidelines in the available time.
+ 
 #### Formula for mortgage calculation can be found in the link below,
  http://www.wikihow.com/Calculate-Mortgage-Payments
- 
  
 #### Thank you note
  to implement a dialog with a Delete and an Edit button, when user tap on a specific marker, since this is not a default behaviour supported by Google Maps Android v2 API. I have implemented a solution(hack) as posted on the StackOverFlow thread below,
