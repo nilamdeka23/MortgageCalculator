@@ -15,7 +15,7 @@ import com.google.android.gms.maps.model.Marker;
 /**
  * To implement a A dialog with a Delete button to allow user to remove mortgage calculation and
  * an Edit button to bring the user to the Calculation view to make changes, when user tap on a specific marker.
- * Since this is not a default behaviour supported by google maps android v2 android api. I have implemented a (hack)solution
+ * Since this is not a default behaviour supported by google maps android v2 api, I have implemented a (hack)solution
  * posted on the below StackOverFlow thread,
  * http://stackoverflow.com/questions/14123243/google-maps-android-api-v2-interactive-infowindow-like-in-original-android-go/15040761#15040761
  */
