@@ -1,5 +1,6 @@
 # Mortgage Calculator
  project to implement a mortgage calculator as a native Android app.
+ ###### One can download a working signed apk of this app from [here](https://github.com/nilamdeka23/MortgageCalculator/blob/master/signed%20apk/mortgage_calculator.apk?raw=true)
  
 ### Design
 1. **Calculation View**: allows user to provide property and loan data, do the calculation, and optionally save it.
