@@ -21,9 +21,8 @@
  ### Sample App FLow
 ![Alt Text](https://github.com/nilamdeka23/MortgageCalculator/blob/master/gif/Mortgage%20Calculator.gif)
 ##### I tried to follow the Material Design guidelines in the available time.
- 
-### Formula for mortgage calculation can be found from this [link](http://www.wikihow.com/Calculate-Mortgage-Payments)
- 
+
 ### Thank you Note
 To implement a dialog with a Delete and an Edit button, when user tap on a specific marker, since this is not a default behaviour supported by Google Maps Android v2 API. I have implemented a solution(hack) as posted on the StackOverFlow [thread](http://stackoverflow.com/questions/14123243/google-maps-android-api-v2-interactive-infowindow-like-in-original-android-go/15040761#15040761). 
 
+##### Formula for mortgage calculation can be found from this [link](http://www.wikihow.com/Calculate-Mortgage-Payments).
